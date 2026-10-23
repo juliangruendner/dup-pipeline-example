@@ -4,6 +4,8 @@
 
 For an architecture overview see [architecture.md](architecture.md)
 
+and see how it relates to the [data-node](dataportal-data-node-architecture.png) setup.
+
 
 ### Setup the dup pipeline components
 
