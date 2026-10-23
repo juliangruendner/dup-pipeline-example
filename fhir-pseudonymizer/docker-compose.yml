@@ -1,0 +1,19 @@
+services:
+  fhir-pseudonymizer:
+    image: ghcr.io/miracum/fhir-pseudonymizer:v3.1.1
+    restart: unless-stopped
+    cap_drop:
+      - ALL
+    ipc: none
+    tmpfs:
+      - /tmp
+    security_opt:
+      - "no-new-privileges:true"
+    read_only: true
+    privileged: false
+    env_file:
+      - .env
+    volumes:
+      - "./anonymization.yaml:/opt/fhir-pseudonymizer/dimp_dup_base.yaml:ro"
+    ports:
+      - "127.0.0.1:8083:8080"

@@ -1,0 +1,46 @@
+services:
+  fhir-server:
+    image: samply/blaze:1.11.0
+    healthcheck:
+      test: ["CMD-SHELL", "curl --fail -s http://localhost:8080/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+    environment:
+      BASE_URL: ${FHIR_SERVER_BASE_URL:-http://fhir-server:8080}
+      LOG_LEVEL: ${FHIR_SERVER_LOG_LEVEL:-info}
+      JAVA_TOOL_OPTIONS: ${BLAZE_JVM_ARGS:--Xmx4g}
+      CQL_EXPR_CACHE_SIZE: ${BLAZE_CQL_EXPR_CACHE_SIZE:-128}
+      DB_BLOCK_CACHE_SIZE: ${BLAZE_BLOCK_CACHE_SIZE:-256}
+      DB_RESOURCE_CACHE_SIZE: ${BLAZE_DB_RESOURCE_CACHE_SIZE:-2000000}
+    ports:
+    - ${PORT_FHIR_SERVER_LOCALHOST:-127.0.0.1:8088}:8080
+    restart: unless-stopped
+    volumes:
+    - "dup-pipeline-blaze-data:/app/data"
+
+  fhir-server-dup:
+    image: samply/blaze:1.11.0
+    healthcheck:
+      test: ["CMD-SHELL", "curl --fail -s http://localhost:8080/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+    environment:
+      BASE_URL: ${FHIR_SERVER_BASE_URL:-http://fhir-server:8080}
+      LOG_LEVEL: ${FHIR_SERVER_LOG_LEVEL:-info}
+      JAVA_TOOL_OPTIONS: ${BLAZE_JVM_ARGS:--Xmx4g}
+      CQL_EXPR_CACHE_SIZE: ${BLAZE_CQL_EXPR_CACHE_SIZE:-128}
+      DB_BLOCK_CACHE_SIZE: ${BLAZE_BLOCK_CACHE_SIZE:-256}
+      DB_RESOURCE_CACHE_SIZE: ${BLAZE_DB_RESOURCE_CACHE_SIZE:-2000000}
+    ports:
+    - ${PORT_FHIR_SERVER_DUP_LOCALHOST:-127.0.0.1:8089}:8080
+    restart: unless-stopped
+    volumes:
+    - "dup-pipeline-blaze-data-dup:/app/data"
+
+volumes:
+  dup-pipeline-blaze-data:
+  dup-pipeline-blaze-data-dup:
